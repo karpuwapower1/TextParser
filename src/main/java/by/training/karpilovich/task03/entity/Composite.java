@@ -1,11 +1,14 @@
 package by.training.karpilovich.task03.entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import by.training.karpilovich.task03.service.ComponentByTypeComparator;
 
 public class Composite implements Component {
 
@@ -29,7 +32,8 @@ public class Composite implements Component {
 			while (matcher.find()) {
 				addLeafIfMatchingNotStartsAtFirstIndex(text, start, matcher.start());
 				components.add(new Leaf(text.substring(matcher.start(), matcher.end())));
-				LOGGER.debug(text.substring(matcher.start(), matcher.end()) + " " + part.toString() + " " + part.getRegex());
+				LOGGER.debug(
+						text.substring(matcher.start(), matcher.end()) + " " + part.toString() + " " + part.getRegex());
 				end = matcher.end();
 				start = matcher.end();
 			}
@@ -38,7 +42,8 @@ public class Composite implements Component {
 			Component component = new Composite(nextPart);
 			while (matcher.find()) {
 				addLeafIfMatchingNotStartsAtFirstIndex(text, start, matcher.start());
-				LOGGER.debug(text.substring(matcher.start(), matcher.end()) + " " + part.toString() + " " + part.getRegex());
+				LOGGER.debug(
+						text.substring(matcher.start(), matcher.end()) + " " + part.toString() + " " + part.getRegex());
 				component.parse(text.substring(matcher.start(), matcher.end()));
 				start = matcher.end();
 				end = matcher.end();
@@ -69,15 +74,52 @@ public class Composite implements Component {
 		}
 		return str;
 	}
+
+	public int getCount() {
+		return components.size();
+	}
+
+	public TextPart getPart() {
+		return part;
+	}
+
+	public ArrayList<Component> getComponent() {
+		return components;
+	}
+
+	public Component getChild(int index) {
+		return components.get(index);
+	}
+
+	@Override
+	public void sort(TextPart part) {
+		if (part.ordinal() < this.part.ordinal()) {
+//			LOGGER.debug("part ordinal = " + part.ordinal() + " " + part.toString() + " this..." + this.part.ordinal() 
+//			+ "   " + this.part.toString());
+			return;
+		}
+		if (this.part.ordinal() == part.ordinal()) {
+			Collections.sort(components, new ComponentByTypeComparator());
+			return;
+		}
+		for (Component component : components) {
+			LOGGER.debug(component.getPart());
+			component.sort(part);
+		}
+	}
+
 }
 
 class Testt {
 	private static final Logger LOGGER = LogManager.getLogger(Testt.class);
 
 	public static void main(String[] args) {
-		String text = new String(" My name is Alex. I am from Minsk?\n London is a capital of GB.\n");
+		String text = new String(
+				" London is a capital of GB.\n Yeap, I know, my english is perfect.\n  My name is Alex. I am from Minsk? bla-bla-bla-.\n ");
 		Composite composite = new Composite(TextPart.PARAGRAPH);
 		composite.parse(text);
+		LOGGER.debug(composite.get());
+		composite.sort(TextPart.WORD);
 		LOGGER.debug(composite.get());
 	}
 }

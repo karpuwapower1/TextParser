@@ -25,6 +25,4 @@ public enum TextPart {
 	public int getNumber() {
 		return this.ordinal();
 	}
-	
-
 }
