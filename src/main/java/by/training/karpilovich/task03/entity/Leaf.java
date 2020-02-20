@@ -2,6 +2,8 @@ package by.training.karpilovich.task03.entity;
 
 import java.util.ArrayList;
 
+import by.training.karpilovich.task03.entity.ChainParser.ParserType;
+
 public class Leaf implements Component {
 	
 	private String symbol;
@@ -22,10 +24,6 @@ public class Leaf implements Component {
 	public String get() {
 		return symbol;
 	}
-	
-	public TextPart getPart() {
-		return TextPart.SYMBOL;
-	}
 
 	@Override
 	public int getCount() {
@@ -43,7 +41,7 @@ public class Leaf implements Component {
 	}
 
 	@Override
-	public void sort(TextPart part) {
+	public void sort(ParserType type) {
 		return;
 	}
 	

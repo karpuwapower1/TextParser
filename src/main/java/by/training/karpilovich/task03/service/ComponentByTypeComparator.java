@@ -13,8 +13,8 @@ public class ComponentByTypeComparator implements Comparator<Component> {
 
 	@Override
 	public int compare(Component o1, Component o2) {
-		log.debug(o1.get() + " " + o2.get());
-		log.debug(o1.getCount() + " " + o2.getCount());
-		return o2.getCount() - o1.getCount();
+//		log.debug(o1.get() + " " + o2.get());
+//		log.debug(o1.getCount() + " " + o2.getCount());
+		return o1.getCount() - o2.getCount();
 	}
 }
