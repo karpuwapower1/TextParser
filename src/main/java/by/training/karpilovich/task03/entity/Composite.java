@@ -1,72 +1,25 @@
 package by.training.karpilovich.task03.entity;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.training.karpilovich.task03.entity.ChainParser.ParserType;
-import by.training.karpilovich.task03.service.ComponentByTypeComparator;
 
 public class Composite implements Component {
 
 	private static final Logger LOGGER = LogManager.getLogger(Composite.class);
 
 	private ArrayList<Component> components = new ArrayList<>();
-	private ChainParser parser;
-	Pattern pattern;
+	private ParserType type;
 
-	public Composite(ChainParser parser) {
-		this.parser = parser;
-		pattern = Pattern.compile(parser.getParser().getRegex());
+	public Composite(ParserType type) {
+		this.type = type;
 	}
 
-	@Override
-	public void parse(String text) {
-		Matcher matcher = pattern.matcher(text);
-		int end = text.length();
-		int start = 0;
-		if (text.length() == 1) {
-			components.add(new Leaf(text));
-		} else if (!parser.hasNext()) {
-//			LOGGER.debug("PART NEXT " + parser.hasNext());
-			while (matcher.find()) {
-				addLeafIfMatchingNotStartsAtFirstIndex(text, start, matcher.start());
-				components.add(new Leaf(text.substring(matcher.start(), matcher.end())));
-//				LOGGER.debug(text.substring(matcher.start(), matcher.end()) + " " + parser.getParser().toString());
-				end = matcher.end();
-				start = matcher.end();
-			}
-		} else {
-			ChainParser next = parser.getNext();
-			Component component = new Composite(next);
-			while (matcher.find()) {
-				addLeafIfMatchingNotStartsAtFirstIndex(text, start, matcher.start());
-//				LOGGER.debug(text.substring(matcher.start(), matcher.end()) + " " + parser.getParser());
-				component.parse(text.substring(matcher.start(), matcher.end()));
-				start = matcher.end();
-				end = matcher.end();
-			}
-			components.add(component);
-		}
-		addLeafIfMatchigNotEndAtLastIndex(text, end);
-	}
-
-	private void addLeafIfMatchingNotStartsAtFirstIndex(String text, int start, int matcherStart) {
-		if (start != matcherStart) {
-			components.add(new Leaf(text.substring(start, matcherStart)));
-//			LOGGER.debug(text.substring(start, matcherStart) + " " + parser.toString() + " leaf");
-		}
-	}
-
-	private void addLeafIfMatchigNotEndAtLastIndex(String text, int end) {
-		if (end != text.length()) {
-			components.add(new Leaf(text.substring(end)));
-//			LOGGER.debug(text.substring(end) + " " + parser.toString() + " leaf");
-		}
+	public void add(Component component) {
+		components.add(component);
 	}
 
 	public String get() {
@@ -91,19 +44,24 @@ public class Composite implements Component {
 
 	@Override
 	public void sort(ParserType type) {
-		if (!parser.hasNext()) {
-//			LOGGER.debug("parser ordinal = " + parser.ordinal() + " " + parser.toString() + " this..." + this.parser.ordinal() 
-//			+ "   " + this.parser.toString());
-			return;
-		}
-		if (this.parser.getParser() == type) {
-			Collections.sort(components, new ComponentByTypeComparator());
-			return;
-		}
-		for (Component component : components) {
-			component.sort(type);
-		}
+		
 	}
+
+//	@Override
+//	public void sort(ParserType type) {
+//		if (!parser.hasNext()) {
+////			LOGGER.debug("parser ordinal = " + parser.ordinal() + " " + parser.toString() + " this..." + this.parser.ordinal() 
+////			+ "   " + this.parser.toString());
+//			return;
+//		}
+//		if (this.parser.getParser() == type) {
+//			Collections.sort(components, new ComponentByTypeComparator());
+//			return;
+//		}
+//		for (Component component : components) {
+//			component.sort(type);
+//		}
+//	}
 
 }
 
@@ -126,12 +84,9 @@ class Testt {
 		phrase.setNext(lexeme);
 		lexeme.setNext(word);
 		word.setNext(symbol);
+		
+		Component component = paragraph.parse(text);
 
-		Composite composite = new Composite(paragraph);
-
-		composite.parse(text);
-		LOGGER.debug(composite.get());
-		composite.sort(ParserType.WORD);
-		LOGGER.debug(composite.get());
+		LOGGER.debug(component.get());
 	}
 }

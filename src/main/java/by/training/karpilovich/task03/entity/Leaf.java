@@ -15,11 +15,6 @@ public class Leaf implements Component {
 	public String getSymbol() {
 		return symbol;
 	}
-
-	@Override
-	public void parse(String text) {
-		throw new UnsupportedOperationException();
-	}
 	
 	public String get() {
 		return symbol;
@@ -43,6 +38,12 @@ public class Leaf implements Component {
 	@Override
 	public void sort(ParserType type) {
 		return;
+	}
+
+	@Override
+	public void add(Component parse) {
+		throw new UnsupportedOperationException();
+		
 	}
 	
 
