@@ -5,17 +5,23 @@ import java.util.ArrayList;
 import by.training.karpilovich.task03.entity.ChainParser.ParserType;
 
 public class Leaf implements Component {
-	
+
 	private String symbol;
-	
-	public Leaf(String symbol) {
+	private ParserType type;
+
+	public Leaf(ParserType type, String symbol) {
+		this.type = type;
 		this.symbol = symbol;
 	}
-	
+
+	public ParserType getType() {
+		return type;
+	}
+
 	public String getSymbol() {
 		return symbol;
 	}
-	
+
 	public String get() {
 		return symbol;
 	}
@@ -37,14 +43,17 @@ public class Leaf implements Component {
 
 	@Override
 	public void sort(ParserType type) {
-		return;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void add(Component parse) {
 		throw new UnsupportedOperationException();
-		
 	}
-	
+
+	@Override
+	public ChainParser getParser() {
+		throw new UnsupportedOperationException();
+	}
 
 }

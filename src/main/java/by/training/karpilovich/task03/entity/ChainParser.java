@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ChainParser {
-	
+
 	Logger logger = LogManager.getLogger(ChainParser.class);
 
 	private ChainParser next;
@@ -38,26 +38,28 @@ public class ChainParser {
 	}
 
 	public Component parse(String text) {
-		Component component = new Composite(parser);
+		Component component = new Composite(this);
 		Pattern pattern = Pattern.compile(parser.getRegex());
 		Matcher matcher = pattern.matcher(text);
-		if (next == null || text.length() == 1) {
-			logger.debug(text + " " + parser.toString());
-			component = new Leaf(text);
+		if (next == null) {
+			while (matcher.find()) {
+				component.add(new Leaf(parser, text.substring(matcher.start(), matcher.end())));
+				logger.debug(text.substring(matcher.start(), matcher.end()) + " " + parser.toString());
+			}
 		} else {
-			component = new Composite(parser);
 			int start = 0;
 			int end = 0;
 			while (matcher.find()) {
 				if (start != matcher.start()) {
-					component.add(new Leaf(text.substring(start, matcher.start())));
+					component.add(next.parse(text.substring(start, matcher.start())));
 				}
-				logger.debug("FOUND " +  text + " " + parser.toString());
+				logger.debug(text.substring(matcher.start(), matcher.end()) + " " + parser.toString());
 				component.add(next.parse(text.substring(matcher.start(), matcher.end())));
+
 				start = end = matcher.end();
 			}
 			if (end != text.length()) {
-				component.add(new Leaf(text.substring(end, text.length())));
+				component.add(next.parse(text.substring(end, text.length())));
 			}
 		}
 		return component;
@@ -65,8 +67,12 @@ public class ChainParser {
 
 	public enum ParserType {
 
-		PARAGRAPH("[^\\r\\n]+(\\r|\\n|\\r\\n)+"), PHRASE("[^\\.;!\\?]+[\\.;!\\?]+"),
-		LEXEME("[\\s][^\\s]+|[^\\s]+[\\s]"), WORD("[\\w]*([^\\s]|[\\.;!\\?])"), SYMBOL(".");
+		TEXT("[.|\\r|\\n|\\r\\n]*"),
+		PARAGRAPH("[^\\r\\n]+(\\r|\\n|\\r\\n)+"), 
+		PHRASE("[^\\.;!\\?]+[\\.;!\\?]+"),
+		LEXEME("[\\s][^\\s]+|[^\\s]+[\\s]"), 
+		WORD("[.]*([^\\s]|[\\.;!\\?])"), 
+		SYMBOL(".");
 
 		private String regex;
 
