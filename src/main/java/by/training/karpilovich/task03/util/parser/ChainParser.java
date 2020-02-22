@@ -1,10 +1,15 @@
-package by.training.karpilovich.task03.entity;
+package by.training.karpilovich.task03.util.parser;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import by.training.karpilovich.task03.entity.ParserType;
+import by.training.karpilovich.task03.entity.composite.Component;
+import by.training.karpilovich.task03.entity.composite.Composite;
+import by.training.karpilovich.task03.entity.composite.Leaf;
 
 public class ChainParser {
 
@@ -63,26 +68,6 @@ public class ChainParser {
 			}
 		}
 		return component;
-	}
-
-	public enum ParserType {
-
-		TEXT("[.|\\r|\\n|\\r\\n]*"),
-		PARAGRAPH("[^\\r\\n]+(\\r|\\n|\\r\\n)+"), 
-		PHRASE("[^\\.;!\\?]+[\\.;!\\?]+"),
-		LEXEME("[\\s][^\\s]+|[^\\s]+[\\s]"), 
-		WORD("[.]*([^\\s]|[\\.;!\\?])"), 
-		SYMBOL(".");
-
-		private String regex;
-
-		private ParserType(String regex) {
-			this.regex = regex;
-		}
-
-		public String getRegex() {
-			return regex;
-		}
 	}
 
 }

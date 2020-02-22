@@ -1,14 +1,15 @@
-package by.training.karpilovich.task03.entity;
+package by.training.karpilovich.task03.entity.composite;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
+import java.util.Comparator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import by.training.karpilovich.task03.entity.ChainParser.ParserType;
-import by.training.karpilovich.task03.service.ComponentByTypeComparator;
+import by.training.karpilovich.task03.entity.ParserType;
+import by.training.karpilovich.task03.util.comparator.ComponentByTypeComparator;
+import by.training.karpilovich.task03.util.parser.ChainParser;
 
 public class Composite implements Component {
 
@@ -56,17 +57,17 @@ public class Composite implements Component {
 	}
 
 	@Override
-	public void sort(ParserType type) {
-		if (this.parser.getNext().getParser() == type) {
+	public void sort(ParserType textPart, Comparator<Component> comparator) {
+		if (this.parser.getNext().getParser() == textPart) {
 			LOGGER.debug("sort " + this.parser.getParser() + get());
 			LOGGER.debug("size " + getCount());
-			Collections.sort(components, new ComponentByTypeComparator(type));
+			Collections.sort(components, comparator);
 			LOGGER.debug("AFTER sort " +  get());
 			return;
 		}
 		for (Component component : components) {
 			try {
-				component.sort(type);
+				component.sort(textPart, comparator);
 			} catch (UnsupportedOperationException e) {
 // 				do nothing because it's a leaf
 			}
@@ -79,9 +80,9 @@ class Testt {
 
 	public static void main(String[] args) {
 		String textt = new String(
-				" first 3 3. second 2. third.\r\n"
+						  " first 3 3. second 2. third.\r\n"
 						+ "	forth.\r\n"
-						+ "	fifth. sixth.\r\n ");
+						+ "	fifthhh tr tr t trr. sixth trtrtrt.\r\n ");
 		ChainParser text = new ChainParser(ParserType.TEXT);
 		ChainParser paragraph = new ChainParser(ParserType.PARAGRAPH);
 		ChainParser phrase = new ChainParser(ParserType.PHRASE);
@@ -96,8 +97,9 @@ class Testt {
 		Component component = paragraph.parse(textt);
 
 		LOGGER.debug(component.get());
+		Comparator<Component> comparator = new ComponentByTypeComparator(ParserType.WORD);
+		component.sort(ParserType.PHRASE, comparator);
 
-		component.sort(ParserType.WORD);
 		LOGGER.debug("SORT\n\n\n\n" + component.get());
 	}
 }

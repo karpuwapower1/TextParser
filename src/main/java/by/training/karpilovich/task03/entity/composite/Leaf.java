@@ -1,8 +1,10 @@
-package by.training.karpilovich.task03.entity;
+package by.training.karpilovich.task03.entity.composite;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
-import by.training.karpilovich.task03.entity.ChainParser.ParserType;
+import by.training.karpilovich.task03.entity.ParserType;
+import by.training.karpilovich.task03.util.parser.ChainParser;
 
 public class Leaf implements Component {
 
@@ -42,7 +44,7 @@ public class Leaf implements Component {
 	}
 
 	@Override
-	public void sort(ParserType type) {
+	public void sort(ParserType textPart, Comparator<Component> comparator) {
 		throw new UnsupportedOperationException();
 	}
 
