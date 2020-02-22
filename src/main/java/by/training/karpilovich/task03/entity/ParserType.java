@@ -7,6 +7,7 @@ public enum ParserType {
 	PHRASE("[^\\.;!\\?]+[\\.;!\\?]+"),
 	LEXEME("[\\s][^\\s]+|[^\\s]+[\\s]"), 
 	WORD("[.]*([^\\s]|[\\.;!\\?])"), 
+	POLISH_NOTATION("  "),
 	SYMBOL(".");
 
 	private String regex;
