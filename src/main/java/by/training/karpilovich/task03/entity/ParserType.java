@@ -6,10 +6,10 @@ public enum ParserType {
 	PARAGRAPH("[^\\r\\n]+(\\r|\\n|\\r\\n)+"), 
 	PHRASE("[^\\.;!\\?]+[\\.;!\\?]+"),
 	LEXEME("[\\s][^\\s]+|[^\\s]+[\\s]"), 
-	WORD("[.]*([^\\s]|[\\.;!\\?])"), 
-	POLISH_NOTATION("  "),
+	POLISH_NOTATION("[[\\d]*[%&()*+-/<=>^\\|~&&[^,.]]+[\\d]*]{2,}"),
+	WORD("([\\w]+[^\\w])"), 
 	SYMBOL(".");
-
+	
 	private String regex;
 
 	private ParserType(String regex) {

@@ -29,17 +29,12 @@ public class Leaf implements Component {
 	}
 
 	@Override
-	public int getCount() {
-		return 1;
+	public int getComponentCount() {
+		return 0;
 	}
 
 	@Override
 	public ArrayList<Component> getComponent() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Component getChild(int index) {
 		throw new UnsupportedOperationException();
 	}
 

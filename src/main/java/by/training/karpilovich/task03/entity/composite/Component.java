@@ -8,11 +8,15 @@ import by.training.karpilovich.task03.util.parser.ChainParser;
 
 public interface Component {
 	String get();
-	int getCount();
+
+	int getComponentCount();
+
 	List<Component> getComponent();
-	Component getChild(int index);
-	void sort(ParserType textPart, Comparator<Component> comparator);
+
 	void add(Component parse);
+
 	ChainParser getParser();
+	
+	void sort(ParserType textPart, Comparator<Component> comparator);
 
 }

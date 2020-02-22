@@ -49,7 +49,6 @@ public class ChainParser {
 		if (next == null) {
 			while (matcher.find()) {
 				component.add(new Leaf(parser, text.substring(matcher.start(), matcher.end())));
-				logger.debug(text.substring(matcher.start(), matcher.end()) + " " + parser.toString());
 			}
 		} else {
 			int start = 0;
@@ -58,7 +57,6 @@ public class ChainParser {
 				if (start != matcher.start()) {
 					component.add(next.parse(text.substring(start, matcher.start())));
 				}
-				logger.debug(text.substring(matcher.start(), matcher.end()) + " " + parser.toString());
 				component.add(next.parse(text.substring(matcher.start(), matcher.end())));
 
 				start = end = matcher.end();
