@@ -26,11 +26,11 @@ public class ChainPolishNotationParser extends ChainParser {
 	public ChainPolishNotationParser() {
 		super(ParserType.POLISH_NOTATION);
 	}
-	
+
 	/*
-	 * Finds an arithmetic expressions in the text, counts their values 
-	 * and changes them to that result. Result text is passing into next 
-	 *  parser or an leaf is creating, if next parser is null;
+	 * Finds an arithmetic expressions in the text, counts their values and changes
+	 * them to that result. Result text is passing into next parser or an leaf is
+	 * creating, if next parser is null;
 	 */
 
 	public Component parse(String text) {
@@ -48,7 +48,8 @@ public class ChainPolishNotationParser extends ChainParser {
 				index = matcher.start() + result.length();
 				matcher = pattern.matcher(text);
 			} catch (IllegalMathematicExpressionException e) {
-				// expression isn't valid, so index moves in the matcher's end and searching continue
+				// expression isn't valid, so index moves in the matcher's end and searching
+				// continue
 				LOGGER.warn(text.substring(matcher.start(), matcher.end()) + "isn't valid expression");
 				index = matcher.end();
 			}
@@ -66,7 +67,7 @@ public class ChainPolishNotationParser extends ChainParser {
 		LinkedList<String> operation = new LinkedList<String>();
 		String operator;
 		while (text.length() > 0) {
-			//parses digit as long as operator isn't found and adds it into out stack
+			// parses digit as long as operator isn't found and adds it into out stack
 			if (isFirstSymbolDigit(text)) {
 				operator = takeDigit(text);
 				out.add(operator);
@@ -75,22 +76,28 @@ public class ChainPolishNotationParser extends ChainParser {
 			}
 			operator = takeOperator(text);
 			text = text.substring(operator.length());
-			//is operation stack is empty, operation is pushed into it
+			// is operation stack is empty, operation is pushed into it
 			if (operation.isEmpty()) {
 				operation.add(operator);
 				continue;
 			}
-			//if operator is ')' all operators before '(' are pushed into out stack;
+			// if operator is ')' all operators before '(' are pushed into out stack;
 			if (operator.equals(OperationAndPriority.CLOSE_BRACKET.operation)) {
-				while (!(operator = operation.poll()).equals(OperationAndPriority.OPEN_BRACKET.operation)) {
-					out.add(operator);
+				try {
+					while (!(operator = operation.poll()).equals(OperationAndPriority.OPEN_BRACKET.operation)) {
+						out.add(operator);
+					}
+					continue;
+				} catch (NullPointerException e) {
+					//invalid expression : close brackets more then opening
+					throw new IllegalMathematicExpressionException(e);
 				}
-				continue;
 			}
 			int priority = determineOperatorPriority(operator);
 			int lastOperatorPriority = determineOperatorPriority(operation.peek());
-			
-			// pop operators from operation stack while priority less than operator's priority
+
+			// pop operators from operation stack while priority less than operator's
+			// priority
 			// and adds them into out stack
 			// adds operator into operations anyway
 			if (operation.peek().equals(OperationAndPriority.OPEN_BRACKET.operation)
@@ -144,7 +151,7 @@ public class ChainPolishNotationParser extends ChainParser {
 		int index = 0;
 		String operator = String.valueOf(text.charAt(index++));
 		while (text.length() > index && (operator.equals(GREATER) || operator.equals(LESS))) {
-			operator += String.valueOf(text.charAt(index++)); 
+			operator += String.valueOf(text.charAt(index++));
 		}
 		return operator;
 	}
