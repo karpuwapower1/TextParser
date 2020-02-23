@@ -10,6 +10,7 @@ import by.training.karpilovich.task03.entity.ParserType;
 import by.training.karpilovich.task03.entity.composite.Component;
 import by.training.karpilovich.task03.entity.composite.Composite;
 import by.training.karpilovich.task03.entity.composite.Leaf;
+import by.training.karpilovich.task03.exception.ParserException;
 
 public class ChainParser {
 
@@ -42,7 +43,10 @@ public class ChainParser {
 		return next != null;
 	}
 
-	public Component parse(String text) {
+	public Component parse(String text) throws ParserException {
+		if (text == null) {
+			throw new ParserException("text is null");
+		}
 		Component component = new Composite(this);
 		Pattern pattern = Pattern.compile(parser.getRegex());
 		Matcher matcher = pattern.matcher(text);

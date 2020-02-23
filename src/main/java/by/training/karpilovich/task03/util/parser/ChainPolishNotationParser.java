@@ -14,6 +14,7 @@ import by.training.karpilovich.task03.entity.composite.Component;
 import by.training.karpilovich.task03.entity.composite.Composite;
 import by.training.karpilovich.task03.entity.composite.Leaf;
 import by.training.karpilovich.task03.exception.IllegalMathematicExpressionException;
+import by.training.karpilovich.task03.exception.ParserException;
 
 public class ChainPolishNotationParser extends ChainParser {
 
@@ -33,7 +34,10 @@ public class ChainPolishNotationParser extends ChainParser {
 	 * creating, if next parser is null;
 	 */
 
-	public Component parse(String text) {
+	public Component parse(String text) throws ParserException {
+		if (text == null ) {
+			throw new ParserException();
+		}
 		ParserType parser = super.getParser();
 		ChainParser next = super.getNext();
 		Component component = new Composite(this);
