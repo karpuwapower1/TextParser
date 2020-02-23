@@ -30,7 +30,7 @@ public class ChainPolishNotationParser extends ChainParser {
 	/*
 	 * Finds an arithmetic expressions in the text, counts their values 
 	 * and changes them to that result. Result text is passing into next 
-	 *  parser or an leaf is created, if next parser is null;
+	 *  parser or an leaf is creating, if next parser is null;
 	 */
 
 	public Component parse(String text) {
@@ -48,7 +48,8 @@ public class ChainPolishNotationParser extends ChainParser {
 				index = matcher.start() + result.length();
 				matcher = pattern.matcher(text);
 			} catch (IllegalMathematicExpressionException e) {
-				// expression isn't valid, so index moves in the matcher's end and finding continuing
+				// expression isn't valid, so index moves in the matcher's end and searching continue
+				LOGGER.warn(text.substring(matcher.start(), matcher.end()) + "isn't valid expression");
 				index = matcher.end();
 			}
 		}
@@ -65,6 +66,7 @@ public class ChainPolishNotationParser extends ChainParser {
 		LinkedList<String> operation = new LinkedList<String>();
 		String operator;
 		while (text.length() > 0) {
+			//parses digit as long as operator isn't found and adds it into out stack
 			if (isFirstSymbolDigit(text)) {
 				operator = takeDigit(text);
 				out.add(operator);
@@ -73,10 +75,12 @@ public class ChainPolishNotationParser extends ChainParser {
 			}
 			operator = takeOperator(text);
 			text = text.substring(operator.length());
+			//is operation stack is empty, operation is pushed into it
 			if (operation.isEmpty()) {
 				operation.add(operator);
 				continue;
 			}
+			//if operator is ')' all operators before '(' are pushed into out stack;
 			if (operator.equals(OperationAndPriority.CLOSE_BRACKET.operation)) {
 				while (!(operator = operation.poll()).equals(OperationAndPriority.OPEN_BRACKET.operation)) {
 					out.add(operator);
@@ -85,6 +89,10 @@ public class ChainPolishNotationParser extends ChainParser {
 			}
 			int priority = determineOperatorPriority(operator);
 			int lastOperatorPriority = determineOperatorPriority(operation.peek());
+			
+			// pop operators from operation stack while priority less than operator's priority
+			// and adds them into out stack
+			// adds operator into operations anyway
 			if (operation.peek().equals(OperationAndPriority.OPEN_BRACKET.operation)
 					|| priority > lastOperatorPriority) {
 				operation.addFirst(operator);
@@ -170,7 +178,7 @@ public class ChainPolishNotationParser extends ChainParser {
 		throw new IllegalMathematicExpressionException();
 	}
 
-	enum OperationAndPriority {
+	private enum OperationAndPriority {
 
 		OPEN_BRACKET("(", 16), CLOSE_BRACKET(")", 16), UNARY_BITWISE_NOT("~", 14), LEFT_SHIFT("<<", 10),
 		RIGHT_SHIFT(">>", 10), RIGHT_SHIFT_WITH_NO_EXTENSION(">>>", 10), BITWISE_AND("&", 7), BITWISE_XOR("^", 6),
@@ -193,35 +201,3 @@ public class ChainPolishNotationParser extends ChainParser {
 		}
 	}
 }
-
-//class TestPPP {
-//
-//	private static final Logger logger = LogManager.getLogger(ChainPolishNotationParser.class);
-//
-//	public static void main(String[] args) throws Exception {
-//
-//		ChainPolishNotationParser parser = new ChainPolishNotationParser();
-//		String test = "~6&9|(3&4)";
-//		logger.debug(~6&9|(3&4) );
-//		Queue<String> queue = parser.makePolishReverseNotation(test);
-//		String polish = "";
-//		for (String str : queue) {
-//			polish += str;
-//		}
-//		logger.debug(polish);
-//		logger.debug(parser.countPolishNotation(queue));
-//		logger.debug(~6&9|(3&4) );
-//
-//
-////		String text = "It has survived - not only (five) centuries, but also the leap into 13<<2 electronic type setting, remaining 3>>5 essentially ~6&9|(3&4) unchanged. It was popularised in the 5|(1&2&(3|(4&(6^5|6&47)|3)|2)|1) with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\r\n"
-////				+ "	It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using (~71&(2&3|(3|(2&1>>2|2)&2)|10&2))|78 Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using (Content here), content here', making it look like readable English.\r\n"
-////				+ "	It is a  (4^5|1&2<<(2|5>>2&71))|1200 established -9 fact that a 6+ reader will be of a page when looking at its layout.\r\n"
-////				+ "	Bye.\r\n";
-////
-////		Pattern pattern = Pattern.compile("[[\\d]*[%&()*+-/<=>^\\|~&&[^,.]]+[\\d]]{2,}");
-////		Matcher matcher = pattern.matcher(text);
-////		while (matcher.find()) {
-////			logger.debug(text.substring(matcher.start(), matcher.end()));
-////		}
-//	}
-//}

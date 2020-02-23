@@ -20,11 +20,8 @@ public class Leaf implements Component {
 		return type;
 	}
 
-	public String getSymbol() {
-		return symbol;
-	}
-
-	public String get() {
+	@Override
+	public String getText() {
 		return symbol;
 	}
 

@@ -58,7 +58,6 @@ public class ChainParser {
 					component.add(next.parse(text.substring(start, matcher.start())));
 				}
 				component.add(next.parse(text.substring(matcher.start(), matcher.end())));
-
 				start = end = matcher.end();
 			}
 			if (end != text.length()) {

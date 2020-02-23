@@ -7,7 +7,7 @@ import by.training.karpilovich.task03.entity.ParserType;
 import by.training.karpilovich.task03.util.parser.ChainParser;
 
 public interface Component {
-	String get();
+	String getText();
 
 	int getComponentCount();
 

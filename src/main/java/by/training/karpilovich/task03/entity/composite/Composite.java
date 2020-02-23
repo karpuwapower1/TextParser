@@ -42,10 +42,10 @@ public class Composite implements Component {
 	}
 
 	@Override
-	public String get() {
+	public String getText() {
 		String str = "";
 		for (Component component : components) {
-			str += component.get();
+			str += component.getText();
 		}
 		return str;
 	}
