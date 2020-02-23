@@ -14,7 +14,7 @@ import by.training.karpilovich.task03.exception.ParserException;
 
 public class ChainParser {
 
-	Logger logger = LogManager.getLogger(ChainParser.class);
+	private static final Logger LOGGER = LogManager.getLogger(ChainParser.class);
 
 	private ChainParser next;
 	private ParserType parser;
@@ -52,6 +52,7 @@ public class ChainParser {
 		Matcher matcher = pattern.matcher(text);
 		if (next == null) {
 			while (matcher.find()) {
+				LOGGER.debug(parser+ " " + text.substring(matcher.start(), matcher.end()));
 				component.add(new Leaf(parser, text.substring(matcher.start(), matcher.end())));
 			}
 		} else {
@@ -59,12 +60,15 @@ public class ChainParser {
 			int end = 0;
 			while (matcher.find()) {
 				if (start != matcher.start()) {
+					LOGGER.debug(next.getParser() +" " + text.substring(end, text.length()));
 					component.add(next.parse(text.substring(start, matcher.start())));
 				}
+				LOGGER.debug(next.getParser() + " " + text.substring(end, text.length()));
 				component.add(next.parse(text.substring(matcher.start(), matcher.end())));
 				start = end = matcher.end();
 			}
 			if (end != text.length()) {
+				LOGGER.debug(next.getParser() + " " + text.substring(end, text.length()));
 				component.add(next.parse(text.substring(end, text.length())));
 			}
 		}

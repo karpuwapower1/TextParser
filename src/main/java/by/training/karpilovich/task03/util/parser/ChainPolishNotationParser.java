@@ -185,7 +185,7 @@ public class ChainPolishNotationParser extends ChainParser {
 			if (value.getOperation().equals(operator))
 				return value.getPriority();
 		}
-		logger.warn("IllegalMathematicExpressionException  operator= " + operator);
+		LOGGER.warn("IllegalMathematicExpressionException  operator= " + operator);
 		throw new IllegalMathematicExpressionException();
 	}
 

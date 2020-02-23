@@ -2,8 +2,8 @@ package by.training.karpilovich.task03.entity;
 
 public enum ParserType {
 
-	TEXT("[.|\\r|\\n|\\r\\n]*"), 
-	PARAGRAPH("[^\\r\\n]+(\\r|\\n|\\r\\n)+"), 
+	TEXT("(.|\\r|\\n|\\r\\n)+"), 
+	PARAGRAPH(".+(\\r|\\n|\\r\\n){1}"), 
 	PHRASE("[^\\.;!\\?]+[\\.;!\\?]+"),
 	LEXEME("[\\s][^\\s]+|[^\\s]+[\\s]"), 
 	POLISH_NOTATION("[[\\d]*[%&()*+-/<=>^\\|~&&[^,.]]+[\\d]*]{2,}"),
