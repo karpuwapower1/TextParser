@@ -1,6 +1,6 @@
 package by.training.karpilovich.task03.exception;
 
-public class ParserException extends Exception  {
+public class ParserException extends Exception {
 
 	public ParserException() {
 		super();
@@ -19,7 +19,5 @@ public class ParserException extends Exception  {
 	}
 
 	private static final long serialVersionUID = 1L;
-	
-	
 
 }

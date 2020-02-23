@@ -9,11 +9,11 @@ import by.training.karpilovich.task03.entity.ParserType;
 import by.training.karpilovich.task03.entity.composite.Component;
 
 public class ComponentByTypeComparator implements Comparator<Component> {
-	
+
 	private static final Logger LOGGER = LogManager.getLogger(ComponentByTypeComparator.class);
-	
+
 	private ParserType type;
-	
+
 	public ComponentByTypeComparator(ParserType type) {
 		this.type = type;
 	}
@@ -22,7 +22,7 @@ public class ComponentByTypeComparator implements Comparator<Component> {
 	public int compare(Component o1, Component o2) {
 		return countComponentWithType(o1, type) - countComponentWithType(o2, type);
 	}
-	
+
 	private int countComponentWithType(Component components, ParserType type) {
 		int typeCount = 0;
 		for (Component component : components.getComponent()) {

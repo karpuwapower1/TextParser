@@ -35,7 +35,7 @@ public class ChainPolishNotationParser extends ChainParser {
 	 */
 
 	public Component parse(String text) throws ParserException {
-		if (text == null ) {
+		if (text == null) {
 			throw new ParserException();
 		}
 		ParserType parser = super.getParser();
@@ -93,7 +93,7 @@ public class ChainPolishNotationParser extends ChainParser {
 					}
 					continue;
 				} catch (NullPointerException e) {
-					//invalid expression : close brackets more then opening
+					// invalid expression : close brackets more then opening
 					throw new IllegalMathematicExpressionException(e);
 				}
 			}
@@ -191,8 +191,14 @@ public class ChainPolishNotationParser extends ChainParser {
 
 	private enum OperationAndPriority {
 
-		OPEN_BRACKET("(", 16), CLOSE_BRACKET(")", 16), UNARY_BITWISE_NOT("~", 14), LEFT_SHIFT("<<", 10),
-		RIGHT_SHIFT(">>", 10), RIGHT_SHIFT_WITH_NO_EXTENSION(">>>", 10), BITWISE_AND("&", 7), BITWISE_XOR("^", 6),
+		OPEN_BRACKET("(", 16), 
+		CLOSE_BRACKET(")", 16), 
+		UNARY_BITWISE_NOT("~", 14), 
+		LEFT_SHIFT("<<", 10),
+		RIGHT_SHIFT(">>", 10), 
+		RIGHT_SHIFT_WITH_NO_EXTENSION(">>>", 10), 
+		BITWISE_AND("&", 7), 
+		BITWISE_XOR("^", 6),
 		BITWISE_OR("|", 5);
 
 		private String operation;

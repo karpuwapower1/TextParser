@@ -16,7 +16,7 @@ public interface Component {
 	void add(Component parse);
 
 	ChainParser getParser();
-	
+
 	void sort(ParserType textPart, Comparator<Component> comparator);
 
 }

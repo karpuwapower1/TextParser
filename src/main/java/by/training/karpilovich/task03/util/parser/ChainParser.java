@@ -52,7 +52,7 @@ public class ChainParser {
 		Matcher matcher = pattern.matcher(text);
 		if (next == null) {
 			while (matcher.find()) {
-				LOGGER.debug(parser+ " " + text.substring(matcher.start(), matcher.end()));
+				LOGGER.debug(parser + " " + text.substring(matcher.start(), matcher.end()));
 				component.add(new Leaf(parser, text.substring(matcher.start(), matcher.end())));
 			}
 		} else {
@@ -60,7 +60,7 @@ public class ChainParser {
 			int end = 0;
 			while (matcher.find()) {
 				if (start != matcher.start()) {
-					LOGGER.debug(next.getParser() +" " + text.substring(end, text.length()));
+					LOGGER.debug(next.getParser() + " " + text.substring(end, text.length()));
 					component.add(next.parse(text.substring(start, matcher.start())));
 				}
 				LOGGER.debug(next.getParser() + " " + text.substring(end, text.length()));
